@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nazarick.image.mapper.ImageMapper">
+    <resultMap id="Image" type="Image">
+        <id property="userId" column="user_id"/>
+        <id property="noteId" column="note_id"/>
+        <id property="no" column="no"/>
+        <result property="data" column="data"/>
+    </resultMap>
+
+    <sql id="selectImage">
+        select * from image
+    </sql>
+
+    <select id="find" parameterType="Image" resultMap="Image">
+        <include refid="selectImage"/>
+        where
+            user_id = #{userId}
+            and note_id = #{noteId}
+            and no = #{no}
+    </select>
+
+    <insert id="insert" parameterType="Image">
+        insert into image (user_id, note_id, no, data)
+        values (#{userId}, #{noteId}, #{no}, #{data})
+    </insert>
+
+    <update id="update" parameterType="Image">
+        update
+            image
+        set
+            data = #{data}
+        where
+            user_id = #{userId}
+            and note_id = #{noteId}
+            and no = #{no}
+    </update>
+
+    <delete id="delete" parameterType="Image">
+        delete from image
+        where
+          user_id = #{userId}
+          and note_id = #{noteId}
+          and no = #{no}
+    </delete>
+</mapper>

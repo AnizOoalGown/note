@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nazarick.note.mapper.NoteMapper">
+    <resultMap id="Note" type="Note">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+    <sql id="selectNote">
+        select * from note
+    </sql>
+
+    <select id="findById" parameterType="Integer" resultMap="Note">
+        <include refid="selectNote"/> where id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="Note">
+        insert into note (id, user_id, content)
+        values (#{id}, #{userId}, #{content})
+    </insert>
+
+    <update id="update" parameterType="Note">
+        update
+            note
+        <set>
+            <if test="userId != null and userId != ''">user_id = #{userId},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+        </set>
+        where
+            id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from note
+        where id = #{id}
+    </delete>
+</mapper>
