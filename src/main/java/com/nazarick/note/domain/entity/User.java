@@ -1,4 +1,4 @@
-package com.nazarick.note.entity;
+package com.nazarick.note.domain.entity;
 
 import lombok.Data;
 

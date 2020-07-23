@@ -1,10 +1,11 @@
-package com.nazarick.note.entity;
+package com.nazarick.note.domain.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class Image {
-    Integer userId;
     Integer noteId;
     Integer no;
     byte[] data;

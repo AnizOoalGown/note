@@ -1,6 +1,6 @@
 package com.nazarick.note.service;
 
-import com.nazarick.note.entity.User;
+import com.nazarick.note.domain.entity.User;
 
 public interface UserService {
     User getById(Integer id);

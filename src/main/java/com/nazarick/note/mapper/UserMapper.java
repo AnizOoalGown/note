@@ -1,6 +1,6 @@
 package com.nazarick.note.mapper;
 
-import com.nazarick.note.entity.User;
+import com.nazarick.note.domain.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
