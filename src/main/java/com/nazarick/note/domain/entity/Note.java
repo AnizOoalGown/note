@@ -6,5 +6,8 @@ import lombok.Data;
 public class Note {
     Integer id;
     Integer userId;
+    String type;
+    String name;
+    Integer parentId;
     String content;
 }

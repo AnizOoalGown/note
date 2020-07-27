@@ -2,6 +2,9 @@ package com.nazarick.note.service;
 
 import com.nazarick.note.domain.bo.NoteBO;
 import com.nazarick.note.domain.entity.Note;
+import com.nazarick.note.domain.vo.MenuNode;
+
+import java.util.List;
 
 /**
  * 笔记 业务层
@@ -17,9 +20,9 @@ public interface NoteService {
     /**
      * 创建笔记
      * @param note 笔记
-     * @return 成功则返回笔记及其图片，不成功则返回空值
+     * @return 成功则返回新建笔记的id，不成功则返回空值
      */
-    NoteBO create(Note note);
+    Integer create(Note note);
 
     /**
      * 更新笔记
@@ -34,4 +37,11 @@ public interface NoteService {
      * @return 是否删除成功
      */
     boolean deleteById(Integer id);
+
+    /**
+     * 根据用户id获取目录树
+     * @param userId 用户id
+     * @return 目录树
+     */
+    List<MenuNode> getMenuTreeByUserId(Integer userId);
 }

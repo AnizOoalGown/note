@@ -2,14 +2,16 @@ package com.nazarick.note.service.impl;
 
 import com.nazarick.note.domain.bo.NoteBO;
 import com.nazarick.note.domain.entity.Note;
+import com.nazarick.note.domain.vo.MenuNode;
 import com.nazarick.note.mapper.NoteMapper;
 import com.nazarick.note.service.ImageService;
 import com.nazarick.note.service.NoteService;
 import com.nazarick.note.util.IdUtil;
+import com.nazarick.note.util.MenuTreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class NoteServiceImpl implements NoteService {
@@ -27,10 +29,14 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public NoteBO create(Note note) {
-        note.setId(IdUtil.genNoteId(note.getUserId()));
+    public Integer create(Note note) {
+        Integer id = IdUtil.genNoteId(note.getUserId());
+        note.setId(id);
+        if ("document".equals(note.getType())) {
+            note.setContent("");
+        }
         int rows = noteMapper.insert(note);
-        return rows == 1 ? new NoteBO(note, new ArrayList<>()) : null;
+        return rows == 1 ? id : null;
     }
 
     @Override
@@ -41,5 +47,10 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public boolean deleteById(Integer id) {
         return imageService.deleteByNoteId(id) && noteMapper.deleteById(id) == 1;
+    }
+
+    @Override
+    public List<MenuNode> getMenuTreeByUserId(Integer userId) {
+        return MenuTreeUtil.buildMenuTree(noteMapper.findNotesByUserId(userId));
     }
 }

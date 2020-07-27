@@ -5,8 +5,6 @@
         <id property="id" column="id"/>
         <result property="username" column="username"/>
         <result property="password" column="password"/>
-        <result property="menuTree" column="menu_tree"/>
-        <result property="lastViewNoteId" column="last_view_note_id"/>
     </resultMap>
 
     <sql id="selectUser">
@@ -22,8 +20,8 @@
     </select>
 
     <insert id="insert" parameterType="User">
-        insert into user (id, username, password, menu_tree, last_view_note_id)
-        values (#{id}, #{username}, #{password}, #{menuTree}, #{lastViewNoteId})
+        insert into user (id, username, password)
+        values (#{id}, #{username}, #{password})
     </insert>
 
     <update id="update" parameterType="User">
@@ -32,8 +30,6 @@
         <set>
             <if test="username != null and username != ''">username = #{username},</if>
             <if test="password != null and password != ''">password = #{password},</if>
-            <if test="menuTree != null and menuTree != ''">menu_tree = #{menuTree},</if>
-            <if test="lastViewNoteId != null and lastViewNoteId != ''">last_view_note_id = #{lastViewNoteId},</if>
         </set>
         where
             id = #{id}

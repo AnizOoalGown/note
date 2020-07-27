@@ -32,4 +32,9 @@ public class NoteController {
     RespDTO deleteById(@PathVariable Integer id) {
         return RespDTO.successIf(noteService.deleteById(id));
     }
+
+    @GetMapping("/menuTree")
+    RespDTO getMenuTreeByUserId(@RequestParam Integer userId) {
+        return RespDTO.success(noteService.getMenuTreeByUserId(userId));
+    }
 }

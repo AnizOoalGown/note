@@ -9,6 +9,15 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class NoteBO {
-    Note note;
+    Integer id;
+    Integer userId;
+    String content;
     List<ImageBO> images;
+
+    public NoteBO(Note note, List<ImageBO> images) {
+        this.id = note.getId();
+        this.userId = note.getUserId();
+        this.content = note.getContent();
+        this.images = images;
+    }
 }
