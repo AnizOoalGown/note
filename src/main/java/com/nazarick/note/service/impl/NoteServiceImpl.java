@@ -45,6 +45,12 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public List<MenuNode> updateBatch(List<Note> notes, Integer userId) {
+        noteMapper.updateBatch(notes);
+        return getMenuTreeByUserId(userId);
+    }
+
+    @Override
     public boolean deleteById(Integer id) {
         return imageService.deleteByNoteId(id) && noteMapper.deleteById(id) == 1;
     }

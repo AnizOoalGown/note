@@ -6,38 +6,38 @@ import org.springframework.http.HttpStatus;
 
 @Data
 @AllArgsConstructor
-public class RespDTO {
+public class RespDTO<T> {
     int code;
     boolean success;
     String msg;
-    Object data;
+    T data;
 
-    public static RespDTO build(int code, boolean success, String msg, Object data) {
-        return new RespDTO(code, success, msg, data);
+    public static <T> RespDTO<T> build(int code, boolean success, String msg, T data) {
+        return new RespDTO<>(code, success, msg, data);
     }
 
-    public static RespDTO success(Object data) {
+    public static <T> RespDTO<T> success(T data) {
         return build(HttpStatus.OK.value(), true, HttpStatus.OK.getReasonPhrase(), data);
     }
 
-    public static RespDTO success() {
+    public static <T> RespDTO<T> success() {
         return success(null);
     }
 
-    public static RespDTO error() {
+    public static <T> RespDTO<T> error() {
         return build(HttpStatus.INTERNAL_SERVER_ERROR.value(), false,
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), null);
     }
 
-    public static RespDTO successIf(boolean statement) {
+    public static <T> RespDTO<T> successIf(boolean statement) {
         return statement ? success() : error();
     }
 
-    public static RespDTO successIf(boolean statement, Object data) {
+    public static <T> RespDTO<T> successIf(boolean statement, T data) {
         return statement ? success(data) : error();
     }
 
-    public static RespDTO successIfNotNull(Object data) {
+    public static <T> RespDTO<T> successIfNotNull(T data) {
         return successIf(data != null, data);
     }
 }

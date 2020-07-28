@@ -32,6 +32,14 @@ public interface NoteService {
     boolean update(Note note);
 
     /**
+     * 批量更新目录
+     * @param notes 目录列表
+     * @param userId 用户id
+     * @return 目录树
+     */
+    List<MenuNode> updateBatch(List<Note> notes, Integer userId);
+
+    /**
      * 删除笔记
      * @param id 笔记id
      * @return 是否删除成功

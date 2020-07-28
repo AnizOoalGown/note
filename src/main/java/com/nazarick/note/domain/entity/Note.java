@@ -9,5 +9,6 @@ public class Note {
     String type;
     String name;
     Integer parentId;
+    Integer orderNo;
     String content;
 }

@@ -7,6 +7,7 @@
         <result property="type" column="type"/>
         <result property="name" column="name"/>
         <result property="parentId" column="parent_id"/>
+        <result property="orderNo" column="order_no"/>
         <result property="content" column="content"/>
     </resultMap>
 
@@ -15,14 +16,14 @@
     </select>
 
     <select id="findNotesByUserId" parameterType="Integer" resultMap="NoteMap">
-        select id, type, name, parent_id
+        select id, type, name, parent_id, order_no
         from note
         where user_id = #{userId}
     </select>
 
     <insert id="insert" parameterType="Note">
-        insert into note (id, user_id, type, name, content)
-        values (#{id}, #{userId}, #{type}, #{name}, #{content})
+        insert into note (id, user_id, type, name, parent_id, order_no, content)
+        values (#{id}, #{userId}, #{type}, #{name}, #{parentId}, #{orderNo}, #{content})
     </insert>
 
     <update id="update" parameterType="Note">
@@ -33,10 +34,28 @@
             <if test="type != null and type != ''">type = #{type},</if>
             <if test="name != null and name != ''">name = #{name},</if>
             <if test="parentId != ''">parent_id = #{parentId},</if>
+            <if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
             <if test="content != null">content = #{content},</if>
         </set>
         where
             id = #{id}
+    </update>
+    
+    <update id="updateBatch" parameterType="List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update
+                note
+            <set>
+                <if test="userId != null and userId != ''">user_id = #{item.userId},</if>
+                <if test="type != null and type != ''">type = #{item.type},</if>
+                <if test="name != null and name != ''">name = #{item.name},</if>
+                <if test="parentId != ''">parent_id = #{item.parentId},</if>
+                <if test="orderNo != null and orderNo != ''">order_no = #{item.orderNo},</if>
+                <if test="content != null">content = #{item.content},</if>
+            </set>
+            where
+            id = #{item.id}
+        </foreach>
     </update>
 
     <delete id="deleteById" parameterType="Integer">
