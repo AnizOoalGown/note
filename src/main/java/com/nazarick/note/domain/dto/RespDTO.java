@@ -24,9 +24,16 @@ public class RespDTO<T> {
         return success(null);
     }
 
+    public static <T> RespDTO<T> failure(int code, String msg) {
+        return build(code, false, msg, null);
+    }
+
+    public static <T> RespDTO<T> error(String msg) {
+        return build(HttpStatus.INTERNAL_SERVER_ERROR.value(), false, msg, null);
+    }
+
     public static <T> RespDTO<T> error() {
-        return build(HttpStatus.INTERNAL_SERVER_ERROR.value(), false,
-                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), null);
+        return error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
     }
 
     public static <T> RespDTO<T> successIf(boolean statement) {

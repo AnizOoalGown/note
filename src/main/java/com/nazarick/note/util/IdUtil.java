@@ -10,4 +10,8 @@ public class IdUtil {
     public static int genImageNo() {
         return (int)(new Date().getTime() % 1e6);
     }
+
+    public static int genUserId() {
+        return (int)(new Date().getTime() % 1e6);
+    }
 }
