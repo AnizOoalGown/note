@@ -7,7 +7,11 @@ import com.nazarick.note.service.UserService;
 import com.nazarick.note.util.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -53,5 +57,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean deleteById(Integer id) {
         return userMapper.deleteById(id) == 1;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        User user = getByUsername(s);
+        if (user == null) {
+            throw new UsernameNotFoundException("User '" + s + "' not found");
+        }
+        return user;
     }
 }
