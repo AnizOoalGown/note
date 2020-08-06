@@ -12,3 +12,8 @@ spring:
     host: 39.97.166.233
     port: 6379
     database: 1
+
+token:
+  header: Authorization
+  secret: abcdefghijklmnopqrstuvwxyz
+  expireTime: 7

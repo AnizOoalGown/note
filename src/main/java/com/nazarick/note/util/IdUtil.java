@@ -1,6 +1,7 @@
 package com.nazarick.note.util;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class IdUtil {
     public static int genNoteId(int userId) {
@@ -13,5 +14,9 @@ public class IdUtil {
 
     public static int genUserId() {
         return (int)(new Date().getTime() % 1e6);
+    }
+
+    public static String genToken() {
+        return UUID.randomUUID().toString();
     }
 }

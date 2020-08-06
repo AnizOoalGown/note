@@ -26,4 +26,13 @@ public class RedisUtil {
         Object valObj = redisTemplate.opsForValue().get(key);
         return JSONObject.parseObject(JSON.toJSONString(valObj), clazz);
     }
+
+    public boolean exists(String key) {
+        Boolean result = redisTemplate.hasKey(key);
+        return result != null && result;
+    }
+
+    public void delete(String key) {
+        redisTemplate.delete(key);
+    }
 }
