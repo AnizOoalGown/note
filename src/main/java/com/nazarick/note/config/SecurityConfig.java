@@ -1,6 +1,5 @@
 package com.nazarick.note.config;
 
-import com.nazarick.note.security.handler.AuthenticationSuccessHandlerImpl;
 import com.nazarick.note.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsUtils;
 
 @EnableWebSecurity
@@ -22,7 +23,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private DaoAuthenticationProvider daoAuthenticationProvider;
 
     @Autowired
-    private AuthenticationSuccessHandlerImpl authenticationSuccessHandler;
+    private AuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -34,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(daoAuthenticationProvider);
     }
 
@@ -44,7 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .anyRequest().authenticated().and()
             .formLogin().loginProcessingUrl("/login").usernameParameter("username").passwordParameter("password")
-                .successHandler(authenticationSuccessHandler).permitAll().and()
+                .successHandler(authenticationSuccessHandler)
+                .failureHandler(authenticationFailureHandler)
+                .permitAll().and()
             .cors();
     }
 }

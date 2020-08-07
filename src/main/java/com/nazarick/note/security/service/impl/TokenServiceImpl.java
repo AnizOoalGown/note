@@ -1,6 +1,7 @@
 package com.nazarick.note.security.service.impl;
 
 import com.nazarick.note.domain.entity.User;
+import com.nazarick.note.domain.vo.UserVO;
 import com.nazarick.note.security.service.TokenService;
 import com.nazarick.note.util.IdUtil;
 import com.nazarick.note.util.RedisUtil;
@@ -28,7 +29,7 @@ public class TokenServiceImpl implements TokenService {
     private RedisUtil redisUtil;
 
     @Override
-    public String setToken(User user) {
+    public String setToken(UserVO user) {
         String token = IdUtil.genToken();
         redisUtil.setIfAbsent(token, user, expireTime, TimeUnit.DAYS);
         return token;

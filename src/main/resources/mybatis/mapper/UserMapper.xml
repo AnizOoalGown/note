@@ -8,7 +8,7 @@
     </resultMap>
 
     <sql id="selectUser">
-        select id, username from user
+        select * from user
     </sql>
 
     <select id="findById" parameterType="Integer" resultMap="User">
