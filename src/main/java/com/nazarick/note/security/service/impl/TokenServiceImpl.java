@@ -1,10 +1,12 @@
 package com.nazarick.note.security.service.impl;
 
 import com.nazarick.note.domain.entity.User;
-import com.nazarick.note.domain.vo.UserVO;
 import com.nazarick.note.security.service.TokenService;
 import com.nazarick.note.util.IdUtil;
 import com.nazarick.note.util.RedisUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class TokenServiceImpl implements TokenService {
+
+    private static final String TOKEN_NAMESPACE = "login_user:";
 
     @Value("${token.header}")
     private String header;
@@ -29,10 +33,24 @@ public class TokenServiceImpl implements TokenService {
     private RedisUtil redisUtil;
 
     @Override
-    public String setToken(UserVO user) {
-        String token = IdUtil.genToken();
-        redisUtil.setIfAbsent(token, user, expireTime, TimeUnit.DAYS);
+    public String setToken(User user) {
+        String key = IdUtil.genUUID();
+        String token = Jwts.builder()
+                .setId(key).setSubject(user.getUsername()).signWith(SignatureAlgorithm.HS512, secret).compact();
+        redisUtil.setIfAbsent(addNamespacePrefix(key), user, expireTime, TimeUnit.DAYS);
         return token;
+    }
+
+    @Override
+    public User getUser(HttpServletRequest request) {
+        String token = request.getHeader(header);
+        if (StringUtils.isEmpty(token)) {
+            return null;
+        }
+        token = token.replaceFirst("Bearer", "");
+        Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        String key = claims.getId();
+        return redisUtil.get(addNamespacePrefix(key), User.class);
     }
 
     @Override
@@ -45,5 +63,9 @@ public class TokenServiceImpl implements TokenService {
     public void deleteToken(HttpServletRequest request) {
         String token = request.getHeader(header);
         redisUtil.delete(token);
+    }
+
+    private String addNamespacePrefix(String key) {
+        return TOKEN_NAMESPACE + key;
     }
 }

@@ -16,7 +16,7 @@ public class IdUtil {
         return (int)(new Date().getTime() % 1e6);
     }
 
-    public static String genToken() {
+    public static String genUUID() {
         return UUID.randomUUID().toString();
     }
 }
