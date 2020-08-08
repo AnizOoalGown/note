@@ -47,25 +47,32 @@ public class TokenServiceImpl implements TokenService {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        token = token.replaceFirst("Bearer", "");
-        Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-        String key = claims.getId();
-        return redisUtil.get(addNamespacePrefix(key), User.class);
+        return redisUtil.get(parseKey(token), User.class);
     }
 
     @Override
     public boolean checkToken(HttpServletRequest request) {
         String token = request.getHeader(header);
-        return !StringUtils.isEmpty(token) && redisUtil.exists(token);
+        return !StringUtils.isEmpty(token) && redisUtil.exists(parseKey(token));
     }
 
     @Override
     public void deleteToken(HttpServletRequest request) {
         String token = request.getHeader(header);
-        redisUtil.delete(token);
+        if (StringUtils.isEmpty(token)) {
+            return;
+        }
+        redisUtil.delete(parseKey(token));
     }
 
     private String addNamespacePrefix(String key) {
         return TOKEN_NAMESPACE + key;
+    }
+
+    private String parseKey(String token) {
+        token = token.replaceFirst("Bearer", "");
+        Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        String key = claims.getId();
+        return addNamespacePrefix(key);
     }
 }
