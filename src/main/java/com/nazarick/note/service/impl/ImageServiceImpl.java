@@ -37,8 +37,13 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public boolean deleteByNoteId(Integer noteId) {
+    public void deleteByNoteId(Integer noteId) {
         Image image = new Image(noteId, null, null);
-        return imageMapper.delete(image) > 0;
+        imageMapper.delete(image);
+    }
+
+    @Override
+    public void deleteByUserId(Integer noteIds) {
+        imageMapper.deleteByUserId(noteIds);
     }
 }

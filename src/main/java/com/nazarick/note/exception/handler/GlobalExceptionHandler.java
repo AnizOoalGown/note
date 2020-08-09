@@ -12,7 +12,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
     public RespDTO<Object> handleCustomException(CustomException e) {
-        log.error(e.getMessage(), e);
+        log.info(e.getMessage());
         return RespDTO.failure(e.getCode(), e.getMessage());
     }
 

@@ -62,4 +62,9 @@
         delete from note
         where id = #{id}
     </delete>
+
+    <delete id="deleteByUserId" parameterType="Integer">
+        delete from note
+        where user_id = #{userId}
+    </delete>
 </mapper>

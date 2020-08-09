@@ -52,7 +52,13 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public boolean deleteById(Integer id) {
-        return imageService.deleteByNoteId(id) && noteMapper.deleteById(id) == 1;
+        imageService.deleteByNoteId(id);
+        return noteMapper.deleteById(id) == 1;
+    }
+
+    @Override
+    public void deleteByUserId(Integer id) {
+        noteMapper.deleteByUserId(id);
     }
 
     @Override

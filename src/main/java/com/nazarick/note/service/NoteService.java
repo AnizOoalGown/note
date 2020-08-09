@@ -47,6 +47,12 @@ public interface NoteService {
     boolean deleteById(Integer id);
 
     /**
+     * 删除某用户所有笔记
+     * @param id 用户id
+     */
+    void deleteByUserId(Integer id);
+
+    /**
      * 根据用户id获取目录树
      * @param userId 用户id
      * @return 目录树

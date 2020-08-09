@@ -10,4 +10,5 @@ public interface ImageMapper {
     List<Image> find(Image image);
     int insert(Image image);
     int delete(Image image);
+    void deleteByUserId(Integer userId);
 }

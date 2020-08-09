@@ -4,14 +4,13 @@ import com.nazarick.note.domain.entity.User;
 import com.nazarick.note.security.service.TokenService;
 import com.nazarick.note.util.IdUtil;
 import com.nazarick.note.util.RedisUtil;
+import com.nazarick.note.util.StringUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.TimeUnit;
 
@@ -34,6 +33,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public String setToken(User user) {
+        // todo: namespace
         String key = IdUtil.genUUID();
         String token = Jwts.builder()
                 .setId(key).setSubject(user.getUsername()).signWith(SignatureAlgorithm.HS512, secret).compact();
@@ -44,7 +44,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public User getUser(HttpServletRequest request) {
         String token = request.getHeader(header);
-        if (StringUtils.isEmpty(token)) {
+        if (StringUtil.isEmpty(token)) {
             return null;
         }
         return redisUtil.get(parseKey(token), User.class);
@@ -53,13 +53,13 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public boolean checkToken(HttpServletRequest request) {
         String token = request.getHeader(header);
-        return !StringUtils.isEmpty(token) && redisUtil.exists(parseKey(token));
+        return StringUtil.isNotEmpty(token) && redisUtil.exists(parseKey(token));
     }
 
     @Override
     public void deleteToken(HttpServletRequest request) {
         String token = request.getHeader(header);
-        if (StringUtils.isEmpty(token)) {
+        if (StringUtil.isEmpty(token)) {
             return;
         }
         redisUtil.delete(parseKey(token));

@@ -35,7 +35,8 @@ public interface ImageService {
     /**
      * 删除id为noteId的笔记的所有图片
      * @param noteId 笔记id
-     * @return 是否删除成功
      */
-    boolean deleteByNoteId(Integer noteId);
+    void deleteByNoteId(Integer noteId);
+
+    void deleteByUserId(Integer userId);
 }
