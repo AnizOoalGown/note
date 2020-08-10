@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class TokenServiceImpl implements TokenService {
 
-    private static final String TOKEN_NAMESPACE = "login_user:";
+    private static final String TOKEN_NAMESPACE = "login_user";
 
     @Value("${token.header}")
     private String header;
@@ -33,11 +33,10 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public String setToken(User user) {
-        // todo: namespace
         String key = IdUtil.genUUID();
         String token = Jwts.builder()
-                .setId(key).setSubject(user.getUsername()).signWith(SignatureAlgorithm.HS512, secret).compact();
-        redisUtil.setIfAbsent(addNamespacePrefix(key), user, expireTime, TimeUnit.DAYS);
+                .setId(key).setSubject(user.getId().toString()).signWith(SignatureAlgorithm.HS512, secret).compact();
+        redisUtil.setIfAbsent(addNamespacePrefix(key, user.getId().toString()), user, expireTime, TimeUnit.DAYS);
         return token;
     }
 
@@ -65,14 +64,32 @@ public class TokenServiceImpl implements TokenService {
         redisUtil.delete(parseKey(token));
     }
 
-    private String addNamespacePrefix(String key) {
-        return TOKEN_NAMESPACE + key;
+    @Override
+    public void deleteUser(HttpServletRequest request) {
+        String token = request.getHeader(header);
+        if (StringUtil.isEmpty(token)) {
+            return;
+        }
+        Claims claims = getClaims(token);
+        String userId = claims.getSubject();
+        redisUtil.deleteNamespace(TOKEN_NAMESPACE + ":" + userId);
+    }
+
+    private String addNamespacePrefix(String key, String userId) {
+        return TOKEN_NAMESPACE + ":" + userId + ":" + key;
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token.replaceFirst("Bearer", ""))
+                .getBody();
     }
 
     private String parseKey(String token) {
-        token = token.replaceFirst("Bearer", "");
-        Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        Claims claims = getClaims(token);
         String key = claims.getId();
-        return addNamespacePrefix(key);
+        String userId = claims.getSubject();
+        return addNamespacePrefix(key, userId);
     }
 }

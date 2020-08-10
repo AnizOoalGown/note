@@ -68,8 +68,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Integer id) {
-        // todo: delete namespace
-        tokenService.deleteToken(ServletUtil.getRequest());
+        tokenService.deleteUser(ServletUtil.getRequest());
         imageService.deleteByUserId(id);
         noteService.deleteByUserId(id);
         userMapper.deleteById(id);

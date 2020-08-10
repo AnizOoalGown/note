@@ -9,4 +9,5 @@ public interface TokenService {
     User getUser(HttpServletRequest request);
     boolean checkToken(HttpServletRequest request);
     void deleteToken(HttpServletRequest request);
+    void deleteUser(HttpServletRequest request);
 }
