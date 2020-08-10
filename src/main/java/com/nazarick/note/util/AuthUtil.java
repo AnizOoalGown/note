@@ -1,7 +1,7 @@
 package com.nazarick.note.util;
 
 import com.nazarick.note.domain.entity.Note;
-import com.nazarick.note.exception.UnauthorizedException;
+import com.nazarick.note.exception.ForbiddenException;
 import com.nazarick.note.mapper.NoteMapper;
 import com.nazarick.note.security.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class AuthUtil {
     public void accessUser(Integer userId) {
         Integer curUserId = getCurUserId();
         if (curUserId == null || !curUserId.equals(userId)) {
-            throw new UnauthorizedException();
+            throw new ForbiddenException();
         }
     }
 
@@ -46,7 +46,7 @@ public class AuthUtil {
     public Note accessNote(Integer noteId) {
         Note note = noteMapper.findById(noteId);
         if (note == null) {
-            throw new UnauthorizedException();
+            throw new ForbiddenException();
         }
         accessUser(note.getUserId());
         return note;

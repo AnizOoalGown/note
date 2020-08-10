@@ -34,10 +34,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    RespDTO<?> updateUsername(@PathVariable Integer id,
-                              @RequestParam(required = false) String username,
-                              @RequestParam(required = false) String password,
-                              @RequestParam(required = false) String newPassword) {
+    RespDTO<?> updateUser(@PathVariable Integer id,
+                          @RequestParam(required = false) String username,
+                          @RequestParam(required = false) String password,
+                          @RequestParam(required = false) String newPassword) {
         if (StringUtil.isNotEmpty(username)) {
             userService.updateUsername(id, username);
             return RespDTO.success();
