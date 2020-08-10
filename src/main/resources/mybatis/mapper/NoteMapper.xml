@@ -12,7 +12,7 @@
     </resultMap>
 
     <select id="findById" parameterType="Integer" resultMap="NoteMap">
-        select id, name, content from note where id = #{id}
+        select * from note where id = #{id}
     </select>
 
     <select id="findNotesByUserId" parameterType="Integer" resultMap="NoteMap">

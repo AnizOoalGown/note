@@ -8,6 +8,7 @@ import com.nazarick.note.security.service.TokenService;
 import com.nazarick.note.service.ImageService;
 import com.nazarick.note.service.NoteService;
 import com.nazarick.note.service.UserService;
+import com.nazarick.note.util.AuthUtil;
 import com.nazarick.note.util.IdUtil;
 import com.nazarick.note.util.ServletUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private AuthUtil authUtil;
+
     @Override
     public UserVO getById(Integer id) {
+        authUtil.accessUser(id);
         User user = userMapper.findById(id);
         return user == null ? null : new UserVO(user);
     }
@@ -53,12 +58,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUsername(Integer id, String username) {
+        authUtil.accessUser(id);
         User user = new User(id, username, null);
         userMapper.update(user);
     }
 
     @Override
     public void updatePassword(Integer id, String password, String newPassword) {
+        authUtil.accessUser(id);
         if (!new BCryptPasswordEncoder().matches(password, userMapper.findById(id).getPassword())) {
             throw new CustomException(HttpStatus.BAD_REQUEST.value(), "原密码错误");
         }
@@ -68,6 +75,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Integer id) {
+        authUtil.accessUser(id);
         tokenService.deleteUser(ServletUtil.getRequest());
         imageService.deleteByUserId(id);
         noteService.deleteByUserId(id);

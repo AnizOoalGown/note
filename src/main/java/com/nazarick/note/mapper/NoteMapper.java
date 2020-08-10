@@ -14,5 +14,5 @@ public interface NoteMapper {
     int update(Note note);
     int updateBatch(List<Note> notes);
     int deleteById(Integer id);
-    int deleteByUserId(Integer id);
+    int deleteByUserId(Integer userId);
 }
