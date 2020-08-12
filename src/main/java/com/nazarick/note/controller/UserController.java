@@ -17,14 +17,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/{id}")
-    RespDTO<UserVO> getById(@PathVariable Integer id) {
-        return RespDTO.success(userService.getById(id));
-    }
-
     @GetMapping
-    RespDTO<UserVO> getByUsername(@RequestParam String username) {
-        return RespDTO.success(userService.getByUsername(username));
+    RespDTO<UserVO> getById(@RequestParam(required = false) Integer id) {
+        return RespDTO.success(userService.getById(id));
     }
 
     @PostMapping

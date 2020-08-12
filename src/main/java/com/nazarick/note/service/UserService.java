@@ -13,13 +13,6 @@ public interface UserService extends UserDetailsService {
     UserVO getById(Integer id);
 
     /**
-     * 根据用户名获取用户展示
-     * @param username 用户名
-     * @return 用户展示
-     */
-    UserVO getByUsername(String username);
-
-    /**
      * 创建用户
      * @param user 用户
      */

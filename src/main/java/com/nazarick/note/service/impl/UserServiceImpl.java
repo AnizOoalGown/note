@@ -38,14 +38,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserVO getById(Integer id) {
-        authUtil.accessUser(id);
+        if (id == null) {
+            id = authUtil.getCurUserId();
+        }
+        else {
+            authUtil.accessUser(id);
+        }
         User user = userMapper.findById(id);
-        return user == null ? null : new UserVO(user);
-    }
-
-    @Override
-    public UserVO getByUsername(String username) {
-        User user = userMapper.findByUsername(username);
         return user == null ? null : new UserVO(user);
     }
 
