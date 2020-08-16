@@ -28,18 +28,21 @@ public class NoteController {
     }
 
     @PutMapping
-    RespDTO<Boolean> update(@RequestBody Note note) {
-        return RespDTO.successIf(noteService.update(note));
+    RespDTO<?> update(@RequestBody Note note) {
+        noteService.update(note);
+        return RespDTO.success();
     }
 
     @PutMapping("/batch")
-    RespDTO<List<MenuNode>> updateBatch(@RequestBody List<Note> notes) {
-        return RespDTO.success(noteService.updateBatch(notes, 1));
+    RespDTO<?> updateBatch(@RequestBody List<Note> notes) {
+        noteService.updateBatch(notes);
+        return RespDTO.success();
     }
 
     @DeleteMapping("/{id}")
-    RespDTO<Boolean> deleteById(@PathVariable Integer id) {
-        return RespDTO.successIf(noteService.deleteById(id));
+    RespDTO<?> deleteById(@PathVariable Integer id) {
+        noteService.deleteById(id);
+        return RespDTO.success();
     }
 
     @GetMapping("/menuTree")

@@ -1,5 +1,6 @@
 package com.nazarick.note.util;
 
+import com.nazarick.note.constants.Constants;
 import com.nazarick.note.domain.entity.Note;
 import com.nazarick.note.domain.vo.MenuNode;
 
@@ -15,7 +16,7 @@ public class MenuTreeUtil {
         Iterator<Note> iterator = notes.iterator();
         while (iterator.hasNext()) {
             Note note = iterator.next();
-            if (note.getParentId() == null) {
+            if (Constants.PARENT_ID.equals(note.getParentId())) {
                 iterator.remove();
                 menuTree.add(new MenuNode(note));
             }

@@ -27,24 +27,20 @@ public interface NoteService {
     /**
      * 更新笔记
      * @param note 笔记
-     * @return 是否更新成功
      */
-    boolean update(Note note);
+    void update(Note note);
 
     /**
      * 批量更新目录
      * @param notes 目录列表
-     * @param userId 用户id
-     * @return 目录树
      */
-    List<MenuNode> updateBatch(List<Note> notes, Integer userId);
+    void updateBatch(List<Note> notes);
 
     /**
      * 删除笔记
      * @param id 笔记id
-     * @return 是否删除成功
      */
-    boolean deleteById(Integer id);
+    void deleteById(Integer id);
 
     /**
      * 删除某用户所有笔记

@@ -33,7 +33,7 @@
             <if test="userId != null and userId != ''">user_id = #{userId},</if>
             <if test="type != null and type != ''">type = #{type},</if>
             <if test="name != null and name != ''">name = #{name},</if>
-            <if test="parentId != ''">parent_id = #{parentId},</if>
+            <if test="parentId != null and parentId != ''">parent_id = #{parentId},</if>
             <if test="orderNo != null and orderNo != ''">order_no = #{orderNo},</if>
             <if test="content != null">content = #{content},</if>
         </set>
@@ -49,7 +49,7 @@
                 <if test="userId != null and userId != ''">user_id = #{item.userId},</if>
                 <if test="type != null and type != ''">type = #{item.type},</if>
                 <if test="name != null and name != ''">name = #{item.name},</if>
-                <if test="parentId != ''">parent_id = #{item.parentId},</if>
+                <if test="parentId != null and parentId != ''">parent_id = #{item.parentId},</if>
                 <if test="orderNo != null and orderNo != ''">order_no = #{item.orderNo},</if>
                 <if test="content != null">content = #{item.content},</if>
             </set>

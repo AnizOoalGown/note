@@ -3,6 +3,7 @@ package com.nazarick.note.service.impl;
 import com.nazarick.note.domain.bo.NoteBO;
 import com.nazarick.note.domain.entity.Note;
 import com.nazarick.note.domain.vo.MenuNode;
+import com.nazarick.note.exception.CustomException;
 import com.nazarick.note.mapper.NoteMapper;
 import com.nazarick.note.service.ImageService;
 import com.nazarick.note.service.NoteService;
@@ -10,6 +11,7 @@ import com.nazarick.note.util.AuthUtil;
 import com.nazarick.note.util.IdUtil;
 import com.nazarick.note.util.MenuTreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +30,11 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public NoteBO getById(Integer id) {
-        return new NoteBO(authUtil.accessNote(id), imageService.getListByNoteId(id));
+        Note note = authUtil.accessNote(id);
+        if ("folder".equals(note.getType())) {
+            throw new CustomException(HttpStatus.BAD_REQUEST.value(), id + "类型不为笔记");
+        }
+        return new NoteBO(note, imageService.getListByNoteId(id));
     }
 
     @Override
@@ -45,23 +51,22 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public boolean update(Note note) {
+    public void update(Note note) {
         authUtil.accessNote(note.getId());
-        return noteMapper.update(note) == 1;
+        noteMapper.update(note);
     }
 
     @Override
-    public List<MenuNode> updateBatch(List<Note> notes, Integer userId) {
+    public void updateBatch(List<Note> notes) {
         notes.forEach(note -> authUtil.accessNote(note.getId()));
         noteMapper.updateBatch(notes);
-        return getMenuTreeByUserId(userId);
     }
 
     @Override
-    public boolean deleteById(Integer id) {
+    public void deleteById(Integer id) {
         authUtil.accessNote(id);
         imageService.deleteByNoteId(id);
-        return noteMapper.deleteById(id) == 1;
+        noteMapper.deleteById(id);
     }
 
     @Override

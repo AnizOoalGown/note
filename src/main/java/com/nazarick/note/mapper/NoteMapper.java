@@ -12,7 +12,7 @@ public interface NoteMapper {
     LinkedList<Note> findNotesByUserId(Integer userId);
     int insert(Note note);
     int update(Note note);
-    int updateBatch(List<Note> notes);
+    void updateBatch(List<Note> notes);
     int deleteById(Integer id);
-    int deleteByUserId(Integer userId);
+    void deleteByUserId(Integer userId);
 }
