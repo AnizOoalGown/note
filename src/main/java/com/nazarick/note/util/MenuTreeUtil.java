@@ -4,10 +4,7 @@ import com.nazarick.note.constants.Constants;
 import com.nazarick.note.domain.entity.Note;
 import com.nazarick.note.domain.vo.MenuNode;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class MenuTreeUtil {
     public static List<MenuNode> buildMenuTree(LinkedList<Note> notes) {
@@ -21,6 +18,8 @@ public class MenuTreeUtil {
                 menuTree.add(new MenuNode(note));
             }
         }
+
+        menuTree.sort(Comparator.comparing(MenuNode::getOrderNo));
 
         for (MenuNode node : menuTree) {
             buildMenuTreeHelper(node, notes);
@@ -38,6 +37,8 @@ public class MenuTreeUtil {
                 node.getChildren().add(new MenuNode(note));
             }
         }
+
+        node.getChildren().sort(Comparator.comparing(MenuNode::getOrderNo));
 
         for (MenuNode child : node.getChildren()) {
             buildMenuTreeHelper(child, notes);

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -58,15 +59,26 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public void updateBatch(List<Note> notes) {
-        notes.forEach(note -> authUtil.accessNote(note.getId()));
+        authUtil.accessNotes(notes);
         noteMapper.updateBatch(notes);
     }
 
     @Override
     public void deleteById(Integer id) {
-        authUtil.accessNote(id);
+        Note deletedNote = authUtil.accessNote(id);
         imageService.deleteByNoteId(id);
         noteMapper.deleteById(id);
+        List<Note> updateNotes = new ArrayList<>();
+        List<Note> notes = noteMapper.findNotesByUserIdParentId(deletedNote.getUserId(), deletedNote.getParentId());
+        for (int i = 0; i < notes.size(); i++) {
+            Note note = notes.get(i);
+            if (i != note.getOrderNo()) {
+                updateNotes.add(Note.builder().id(note.getId()).orderNo(i).build());
+            }
+        }
+        if (updateNotes.size() != 0) {
+            noteMapper.updateBatch(updateNotes);
+        }
     }
 
     @Override

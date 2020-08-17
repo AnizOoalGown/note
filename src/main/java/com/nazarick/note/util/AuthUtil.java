@@ -2,10 +2,13 @@ package com.nazarick.note.util;
 
 import com.nazarick.note.domain.entity.Note;
 import com.nazarick.note.exception.ForbiddenException;
+import com.nazarick.note.exception.NotFoundException;
 import com.nazarick.note.mapper.NoteMapper;
 import com.nazarick.note.security.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * 鉴权工具类
@@ -46,9 +49,27 @@ public class AuthUtil {
     public Note accessNote(Integer noteId) {
         Note note = noteMapper.findById(noteId);
         if (note == null) {
-            throw new ForbiddenException();
+            throw new NotFoundException("note-" + noteId);
         }
         accessUser(note.getUserId());
         return note;
+    }
+
+    /**
+     * 判断是否有权限访问笔记列表
+     * @param notes 笔记列表
+     */
+    public void accessNotes(List<Note> notes) {
+        Integer curUserId = getCurUserId();
+
+        for (Note note1 : notes) {
+            Note note = noteMapper.findById(note1.getId());
+            if (note == null) {
+                throw new NotFoundException("note-" + note1.getId());
+            }
+            if (!curUserId.equals(note.getUserId())) {
+                throw new ForbiddenException();
+            }
+        }
     }
 }
