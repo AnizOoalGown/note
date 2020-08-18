@@ -38,5 +38,9 @@ public interface ImageService {
      */
     void deleteByNoteId(Integer noteId);
 
+    /**
+     * 删除用户所有图片
+     * @param userId 用户id
+     */
     void deleteByUserId(Integer userId);
 }
