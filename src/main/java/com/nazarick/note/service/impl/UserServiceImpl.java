@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
         if (!new BCryptPasswordEncoder().matches(password, userMapper.findById(id).getPassword())) {
             throw new CustomException(HttpStatus.BAD_REQUEST.value(), "原密码错误");
         }
-        User user = new User(id, null, newPassword);
+        User user = new User(id, null, new BCryptPasswordEncoder().encode(newPassword));
         userMapper.update(user);
     }
 

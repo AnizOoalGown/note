@@ -83,7 +83,6 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public void deleteByUserId(Integer userId) {
-        authUtil.accessUser(userId);
         noteMapper.deleteByUserId(userId);
     }
 
