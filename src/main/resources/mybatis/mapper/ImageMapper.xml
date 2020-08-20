@@ -39,6 +39,6 @@
 
     <delete id="deleteByUserId" parameterType="Integer">
         delete from image where note_id in
-        (select note_id from note where user_id = #{userId})
+        (select id from note where user_id = #{userId})
     </delete>
 </mapper>

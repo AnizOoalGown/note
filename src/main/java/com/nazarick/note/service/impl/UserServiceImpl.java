@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = userMapper.findByUsername(s);
         if (user == null) {
-            throw new UsernameNotFoundException("User '" + s + "' not found");
+            throw new UsernameNotFoundException("用户名'" + s + "'不存在");
         }
         return user;
     }
