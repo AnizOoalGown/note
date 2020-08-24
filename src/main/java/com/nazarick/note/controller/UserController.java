@@ -44,9 +44,9 @@ public class UserController {
         throw new CustomException(HttpStatus.BAD_REQUEST.value(), "更新用户参数不正确");
     }
 
-    @DeleteMapping("/{id}")
-    RespDTO<?> deleteById(@PathVariable Integer id) {
-        userService.deleteById(id);
+    @PostMapping("/close/{id}")
+    RespDTO<?> deleteById(@PathVariable Integer id, @RequestParam String password) {
+        userService.deleteById(id, password);
         return RespDTO.success();
     }
 }

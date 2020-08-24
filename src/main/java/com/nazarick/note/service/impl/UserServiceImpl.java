@@ -73,8 +73,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Integer id, String password) {
         authUtil.accessUser(id);
+        if (!new BCryptPasswordEncoder().matches(password, userMapper.findById(id).getPassword())) {
+            throw new CustomException(HttpStatus.BAD_REQUEST.value(), "密码错误");
+        }
         tokenService.deleteUser(ServletUtil.getRequest());
         imageService.deleteByUserId(id);
         noteService.deleteByUserId(id);

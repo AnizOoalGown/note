@@ -36,6 +36,7 @@ public interface UserService extends UserDetailsService {
     /**
      * 删除用户
      * @param id 用户id
+     * @param password 密码
      */
-    void deleteById(Integer id);
+    void deleteById(Integer id, String password);
 }
