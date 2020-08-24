@@ -50,6 +50,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(User user) {
+        if (userMapper.findByUsername(user.getUsername()) != null) {
+            throw new CustomException(HttpStatus.BAD_REQUEST.value(), "用户名" + user.getUsername() + "已存在");
+        }
         user.setId(IdUtil.genUserId());
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userMapper.insert(user);
