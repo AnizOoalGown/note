@@ -1,7 +1,7 @@
 package com.nazarick.note.config;
 
 import com.nazarick.note.security.filter.JwtAuthenticationTokenFilter;
-import com.nazarick.note.security.filter.VerifyCodeFilter;
+import com.nazarick.note.security.filter.CodeFilter;
 import com.nazarick.note.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     @Autowired
-    private VerifyCodeFilter verifyCodeFilter;
+    private CodeFilter codeFilter;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(authenticationFailureHandler)
                 .permitAll().and()
             .logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler).and()
-            .addFilterBefore(verifyCodeFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(codeFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
             .cors();
     }

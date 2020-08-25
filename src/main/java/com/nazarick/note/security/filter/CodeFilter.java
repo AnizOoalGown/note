@@ -1,6 +1,8 @@
 package com.nazarick.note.security.filter;
 
+import com.nazarick.note.exception.InviteCodeException;
 import com.nazarick.note.exception.VerifyCodeException;
+import com.nazarick.note.security.service.InviteCodeService;
 import com.nazarick.note.security.service.VerifyCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -14,10 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class VerifyCodeFilter extends OncePerRequestFilter {
+public class CodeFilter extends OncePerRequestFilter {
 
     @Autowired
     private VerifyCodeService verifyCodeService;
+
+    @Autowired
+    private InviteCodeService inviteCodeService;
 
     @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
@@ -26,10 +31,16 @@ public class VerifyCodeFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
-        if ((request.getRequestURI().equals("/login") || request.getRequestURI().equals("/users"))
+        String uri = request.getRequestURI();
+        if ((uri.equals("/login") || uri.equals("/users"))
                 && request.getMethod().equalsIgnoreCase("post")) {
-            if (!verifyCodeService.validateVerifyCode(request.getParameter("uuid"), request.getParameter("code"))) {
+            if (!verifyCodeService.validateVerifyCode(request.getParameter("uuid"),
+                    request.getParameter("verify_code"))) {
                 authenticationFailureHandler.onAuthenticationFailure(request, response, new VerifyCodeException());
+                return;
+            }
+            if (uri.equals("/users") && !inviteCodeService.delete(request.getParameter("invite_code"))) {
+                authenticationFailureHandler.onAuthenticationFailure(request, response, new InviteCodeException());
                 return;
             }
         }
