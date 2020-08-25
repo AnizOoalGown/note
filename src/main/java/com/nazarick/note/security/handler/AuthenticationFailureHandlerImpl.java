@@ -16,11 +16,11 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) {
-        String msg = null;
+        String msg;
         if (e instanceof BadCredentialsException) {
             msg = "密码错误";
         }
-        else if (e instanceof UsernameNotFoundException) {
+        else {
             msg = e.getMessage();
         }
         ServletUtil.write(httpServletResponse, RespDTO.failure(HttpStatus.BAD_REQUEST.value(), msg));

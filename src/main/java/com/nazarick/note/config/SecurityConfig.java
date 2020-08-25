@@ -1,6 +1,7 @@
 package com.nazarick.note.config;
 
 import com.nazarick.note.security.filter.JwtAuthenticationTokenFilter;
+import com.nazarick.note.security.filter.VerifyCodeFilter;
 import com.nazarick.note.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -41,7 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private LogoutSuccessHandler logoutSuccessHandler;
 
     @Autowired
-    JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+
+    @Autowired
+    private VerifyCodeFilter verifyCodeFilter;
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -62,6 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
             .authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
+                .antMatchers("/verifyCode").permitAll()
                 .anyRequest().authenticated().and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
@@ -70,6 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(authenticationFailureHandler)
                 .permitAll().and()
             .logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler).and()
+            .addFilterBefore(verifyCodeFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
             .cors();
     }
