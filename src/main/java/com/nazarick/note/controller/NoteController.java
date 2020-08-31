@@ -1,6 +1,6 @@
 package com.nazarick.note.controller;
 
-import com.nazarick.note.aop.annotation.APILog;
+import com.nazarick.note.aop.annotation.LogAPI;
 import com.nazarick.note.domain.bo.NoteBO;
 import com.nazarick.note.domain.dto.RespDTO;
 import com.nazarick.note.domain.entity.Note;
@@ -23,27 +23,27 @@ public class NoteController {
         return RespDTO.success(noteService.getById(id));
     }
 
-    @APILog
+    @LogAPI
     @PostMapping
     RespDTO<Integer> create(@RequestBody Note note) {
         return RespDTO.successIfNotNull(noteService.create(note));
     }
 
-    @APILog
+    @LogAPI
     @PutMapping
     RespDTO<?> update(@RequestBody Note note) {
         noteService.update(note);
         return RespDTO.success();
     }
 
-    @APILog
+    @LogAPI
     @PutMapping("/batch")
     RespDTO<?> updateBatch(@RequestBody List<Note> notes) {
         noteService.updateBatch(notes);
         return RespDTO.success();
     }
 
-    @APILog
+    @LogAPI
     @DeleteMapping("/{id}")
     RespDTO<?> deleteById(@PathVariable Integer id) {
         noteService.deleteById(id);

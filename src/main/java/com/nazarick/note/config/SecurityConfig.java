@@ -1,5 +1,6 @@
 package com.nazarick.note.config;
 
+import com.nazarick.note.constants.Constants;
 import com.nazarick.note.security.filter.JwtAuthenticationTokenFilter;
 import com.nazarick.note.security.filter.CodeFilter;
 import com.nazarick.note.service.UserService;
@@ -70,11 +71,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated().and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
-            .formLogin().loginProcessingUrl("/login").usernameParameter("username").passwordParameter("password")
+            .formLogin().loginProcessingUrl(Constants.LOGIN_URL).usernameParameter("username").passwordParameter("password")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
                 .permitAll().and()
-            .logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler).and()
+            .logout().logoutUrl(Constants.LOGOUT_URL).logoutSuccessHandler(logoutSuccessHandler).and()
             .addFilterBefore(codeFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
             .cors();

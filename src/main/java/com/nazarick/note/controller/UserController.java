@@ -1,6 +1,6 @@
 package com.nazarick.note.controller;
 
-import com.nazarick.note.aop.annotation.APILog;
+import com.nazarick.note.aop.annotation.LogAPI;
 import com.nazarick.note.domain.dto.RespDTO;
 import com.nazarick.note.domain.entity.User;
 import com.nazarick.note.domain.vo.UserVO;
@@ -23,14 +23,14 @@ public class UserController {
         return RespDTO.success(userService.getById(id));
     }
 
-    @APILog(saveParams = false)
+    @LogAPI(saveArgs = false)
     @PostMapping
     RespDTO<?> create(@RequestParam String username, @RequestParam String password) {
         userService.create(new User(null, username, password));
         return RespDTO.success();
     }
 
-    @APILog(saveParams = false)
+    @LogAPI(saveArgs = false)
     @PutMapping("/{id}")
     RespDTO<?> updateUser(@PathVariable Integer id,
                           @RequestParam(required = false) String username,
@@ -47,7 +47,7 @@ public class UserController {
         throw new CustomException(HttpStatus.BAD_REQUEST.value(), "更新用户参数不正确");
     }
 
-    @APILog(saveParams = false)
+    @LogAPI(saveArgs = false)
     @PostMapping("/close/{id}")
     RespDTO<?> deleteById(@PathVariable Integer id, @RequestParam String password) {
         userService.deleteById(id, password);

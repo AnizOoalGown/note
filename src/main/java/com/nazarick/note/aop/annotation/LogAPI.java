@@ -5,6 +5,6 @@ import java.lang.annotation.*;
 @Target({ ElementType.PARAMETER, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface APILog {
-    boolean saveParams() default true;
+public @interface LogAPI {
+    boolean saveArgs() default true;
 }

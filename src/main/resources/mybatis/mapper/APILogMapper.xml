@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nazarick.note.mapper.APILogMapper">
+    <resultMap id="APILogMap" type="APILog">
+        <id property="createTime" column="create_time"/>
+        <id property="ip" column="ip"/>
+        <result property="userId" column="user_id"/>
+        <result property="method" column="method"/>
+        <result property="uri" column="uri"/>
+        <result property="args" column="args"/>
+        <result property="code" column="code"/>
+        <result property="msg" column="msg"/>
+        <result property="data" column="data"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="APILog">
+        insert into api_log (create_time, ip, user_id, method, uri, args, code, msg, data)
+        values (sysdate(), #{ip}, #{userId}, #{method}, #{uri}, #{args}, #{code}, #{msg}, #{data})
+    </insert>
+</mapper>
