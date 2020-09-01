@@ -5,6 +5,7 @@ import com.nazarick.note.domain.dto.RespDTO;
 import com.nazarick.note.domain.entity.User;
 import com.nazarick.note.domain.vo.UserVO;
 import com.nazarick.note.security.service.TokenService;
+import com.nazarick.note.service.APILogService;
 import com.nazarick.note.util.ServletUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,9 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private APILogService apiLogService;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) {
@@ -29,5 +33,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         String token = tokenService.setToken(user);
         LoginSuccessDTO loginSuccessDTO = new LoginSuccessDTO(userVO, token);
         ServletUtil.write(response, RespDTO.success(loginSuccessDTO));
+        loginSuccessDTO.setToken("******");
+       apiLogService.asyncSaveAPILog(request, null, RespDTO.success(loginSuccessDTO));
     }
 }

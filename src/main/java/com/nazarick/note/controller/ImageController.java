@@ -14,7 +14,7 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
-    @LogAPI
+    @LogAPI(saveArgs = false)
     @PostMapping
     RespDTO<Image> create(@RequestParam Integer noteId, @RequestBody byte[] data) {
         return RespDTO.successIfNotNull(imageService.create(noteId, data));
