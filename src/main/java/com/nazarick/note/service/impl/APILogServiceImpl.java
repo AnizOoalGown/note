@@ -9,6 +9,7 @@ import com.nazarick.note.exception.CustomException;
 import com.nazarick.note.mapper.APILogMapper;
 import com.nazarick.note.security.service.TokenService;
 import com.nazarick.note.service.APILogService;
+import com.nazarick.note.util.IpUtil;
 import com.nazarick.note.util.ServletUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
@@ -63,13 +64,12 @@ public class APILogServiceImpl implements APILogService {
     @Override
     public void asyncSaveAPILog(HttpServletRequest request, String args, RespDTO<?> respDTO) {
         User user = tokenService.getUser(request);
-        String ip = request.getRemoteAddr();
         Object data = respDTO.getData();
         APILog apiLog = APILog.builder()
                 .code(respDTO.getCode())
                 .msg(respDTO.getMsg())
                 .data(data == null ? null : JSON.toJSONString(data))
-                .ip(ip == null ? "unknown" : ip)
+                .ip(IpUtil.getIpAddr(request))
                 .method(request.getMethod())
                 .uri(request.getRequestURI())
                 .userId(user == null ? null : user.getId())
