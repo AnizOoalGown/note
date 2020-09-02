@@ -15,6 +15,6 @@
 
     <insert id="insert" parameterType="APILog">
         insert into api_log (create_time, ip, user_id, method, uri, args, code, msg, data)
-        values (sysdate(), #{ip}, #{userId}, #{method}, #{uri}, #{args}, #{code}, #{msg}, #{data})
+        values (current_timestamp(3), #{ip}, #{userId}, #{method}, #{uri}, #{args}, #{code}, #{msg}, #{data})
     </insert>
 </mapper>

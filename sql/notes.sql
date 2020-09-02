@@ -1,7 +1,7 @@
 create table api_log
 (
     create_time timestamp not null,
-    ip varchar(40) not null,
+    ip varchar(255) not null,
     user_id int null,
     method varchar(10) null,
     uri varchar(255) null,
